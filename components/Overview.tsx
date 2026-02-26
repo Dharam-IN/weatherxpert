@@ -1,90 +1,54 @@
-import { FaCloud, FaLocationPin } from 'react-icons/fa6';
 import type { Current } from '@/types/WeatherType';
 import { FaClock, FaThermometerHalf } from 'react-icons/fa';
-import { TbWorldLatitude, TbWorldLongitude } from 'react-icons/tb';
 import type { City } from '@/types/CityType';
 import { MdLocationPin } from 'react-icons/md';
 import LocalDate from './LocalDate';
 
 const OverView = ({ data, city }: { data: Current; city: City }) => {
     return (
-        <div className="rounded-xl bg-gray-800 p-4 md:p-6">
-            <div className="flex justify-between font-medium">
-                <h3 className="text-sm md:text-base mb-3 text-gray-400">
-                    <MdLocationPin className="inline-block" /> {city.name}, {city.country}
-                </h3>
-                <p className="text-xs md:text-sm uppercase text-gray-400">
-                    <FaClock className="mr-1 inline-block" />
-                    <LocalDate date={data.dt * 1000} />
-                </p>
+        <section className="card relative overflow-hidden bg-primary-500 text-white border-none shadow-xl" aria-label="Current Weather Overview">
+            {/* Design Accents */}
+            <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
+
+            <div className="flex justify-between items-start font-bold">
+                <h2 className="text-base md:text-lg flex flex-col gap-1">
+                    <span className="flex items-center gap-1 opacity-80 text-xs uppercase tracking-widest"><MdLocationPin /> Current Location</span>
+                    {city.name}, {city.country}
+                </h2>
+                <div className="text-right">
+                    <p className="text-xs uppercase tracking-widest opacity-80 mb-1 flex items-center justify-end gap-1"><FaClock /> Local Time</p>
+                    <p className="text-sm"><LocalDate date={data.dt * 1000} /></p>
+                </div>
             </div>
-            <div className="my-4 flex items-center justify-between">
+            
+            <div className="my-10 flex items-center justify-between">
                 <div>
-                    <h2 className="text-5xl font-medium md:text-6xl">{data.temp.toFixed(0)}°</h2>
-                    <p className="mt-1 text-gray-400 text-sm md:text-base">
-                        <FaThermometerHalf className="inline-block" /> Feels like: {data.feels_like.toFixed(1)}°
+                    {/* Changed from H2 to P to maintain correct SEO hierarchy (H1 is the site title) */}
+                    <p className="text-8xl font-black tracking-tighter drop-shadow-lg">
+                        {data.temp.toFixed(0)}°
+                    </p>
+                    <p className="mt-3 text-sm md:text-base font-bold bg-white/20 inline-flex items-center gap-2 px-4 py-2 rounded-full">
+                        <FaThermometerHalf /> Feels like {data.feels_like.toFixed(1)}°
                     </p>
                 </div>
                 <img
                     src={`https://openweathermap.org/img/wn/${data.weather[0].icon}@4x.png`}
-                    className="-my-8 size-28 md:-mx-4 md:size-36"
+                    className="size-36 md:size-48 drop-shadow-[0_10px_15px_rgba(0,0,0,0.2)]"
+                    alt={`Current weather in ${city.name} is ${data.weather[0].description}`}
+                    fetchPriority="high" // SEO: prioritize above-the-fold image
                 />
             </div>
-            <div className="mt-4 flex items-end gap-4 text-gray-400">
-                <p className="mr-auto font-medium capitalize text-gray-300 text-sm md:text-xl">{data.weather[0].description}</p>
-                <p className="text-xs hidden md:text-sm">Lat: {city.lat.toFixed(3)}°</p>
-
-                <p className="text-xs hidden md:text-sm">Lon: {city.lon.toFixed(3)}°</p>
-                {/* <p className="md:text-sm">Feels like: {data.feels_like}</p> */}
+            
+            <div className="mt-4 flex items-end gap-4 font-bold border-t border-white/20 pt-5">
+                <p className="mr-auto capitalize text-xl md:text-2xl tracking-tight">
+                    {data.weather[0].description}
+                </p>
+                <div className="text-right text-xs opacity-80 flex flex-col gap-1">
+                    <p>Lat: {city.lat.toFixed(2)}°</p>
+                    <p>Lon: {city.lon.toFixed(2)}°</p>
+                </div>
             </div>
-
-            {/* 
-                <div>
-                    <p className="flex items-center text-6xl font-semibold text-gray-100 md:text-5xl">
-                        <span>{data.temp}°</span>
-                        <img
-                            src={`https://openweathermap.org/img/wn/${data.weather[0].icon}@4x.png`}
-                            className="size-28"
-                        />
-                    </p>
-                </div>
-
-                <div>
-                    <p className="mt-4 font-semibold capitalize">{data.weather[0].description}</p>
-                    <p className="text-sm text-gray-300">Feels like {data.feels_like.toFixed(1)}°</p>
-                </div>
-            </div> */}
-
-            {/* <div className="flex w-full justify-between rounded-lg bg-gray-800 p-3 text-xs font-medium text-gray-300 shadow-md">
-                <p>
-                    <FaTemperatureArrowUp className="inline-block" /> Max: {data.main.temp_max.toFixed(1)}°
-                </p>
-                <p>
-                    <FaTemperatureArrowDown className="inline-block" /> Min: {data.main.temp_min.toFixed(1)}°
-                </p>
-                <p>
-                    <FaCloud className="inline-block" /> Clouds: {data.clouds.all}%
-                </p>
-            </div> */}
-            {/* <div className="mt-12 flex flex-col items-center justify-between text-center md:flex-row">
-                <img src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@4x.png`} className="-my-4 size-32" />
-                <p className="text-7xl font-semibold">{weather.main.temp.toFixed(0)}°</p>
-                <p className="text-sm text-gray-400">Feels like {weather.main.feels_like.toFixed(1)}°</p>
-                <p className="mt-2 text-2xl font-semibold capitalize text-gray-300">{weather.weather[0].description}</p>
-
-                <div className="mt-6 flex w-full justify-between rounded-lg bg-gray-800 p-3 text-xs font-medium text-gray-300 shadow-md">
-                    <p>
-                        <FaTemperatureArrowUp className="inline-block" /> Max: {weather.main.temp_max.toFixed(1)}°
-                    </p>
-                    <p>
-                        <FaTemperatureArrowDown className="inline-block" /> Min: {weather.main.temp_min.toFixed(1)}°
-                    </p>
-                    <p>
-                        <FaCloud className="inline-block" /> Clouds: {weather.clouds.all}%
-                    </p>
-                </div>
-            </div> */}
-        </div>
+        </section>
     );
 };
 

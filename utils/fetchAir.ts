@@ -12,6 +12,8 @@ const fetchAir = async ({ lat, lon }: Params): Promise<Air> => {
         },
     });
 
+    console.log('response=========>',response)
+
     const air = response.data?.list[0];
     return air;
 }

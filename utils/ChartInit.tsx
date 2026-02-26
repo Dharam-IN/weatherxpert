@@ -27,21 +27,21 @@ ChartJS.register(
     RadialLinearScale,
     Filler,
     Tooltip,
-    // Legend,
     Title,
     Colors,
     ChartDataLabels,
 );
 
 ChartJS.defaults.plugins.colors.enabled = false;
-
 ChartJS.defaults.plugins.title.display = true;
-// ChartJS.defaults.plugins.legend.position = 'bottom';
-// ChartJS.defaults.borderColor = '#000000';
-ChartJS.defaults.scale.grid.color = 'rgba(256, 256, 256, 0.03)';
+
+// Set generic colors that look modern and adapt well to both themes
+ChartJS.defaults.scale.grid.color = 'rgba(150, 150, 150, 0.1)';
+ChartJS.defaults.color = '#94a3b8'; // text-slate-400
+ChartJS.defaults.font.family = 'Poppins, sans-serif';
 
 const ChartInit = () => {
-    return <div></div>;
+    return null; // Empty wrapper
 };
 
 export default ChartInit;

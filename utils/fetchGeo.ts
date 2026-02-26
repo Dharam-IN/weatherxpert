@@ -17,22 +17,17 @@ const fetchGeo = async (q: string): Promise<City | null> => {
             const response = await OpenWeather.get<City[]>('geo/1.0/direct', {
                 params: { q, limit: 1 },
             });
-
             return response.data[0];
         }
 
         if (!process.env.IPINFO_API_KEY) {
-            console.log('\n\nIPINFO_API_KEY is not set in the .env file');
-            console.log('\nYou need to set the IPINFO_API_KEY in the .env file for fetching the location based on IP address\n\n');
+            console.log('\nIPINFO_API_KEY is not set in the .env file');
             return null;
         }
 
         const { data } = await axios.get('https://ipinfo.io/' + IP(), {
-            params: {
-                token: process.env.IPINFO_API_KEY
-            }
+            params: { token: process.env.IPINFO_API_KEY }
         });
-
 
         const city: City = {
             name: data.city,
@@ -48,7 +43,19 @@ const fetchGeo = async (q: string): Promise<City | null> => {
         console.log(error);
         return null;
     }
+}
 
+// NEW: Function to get City by Live Location Coordinates
+export const fetchReverseGeo = async (lat: number, lon: number): Promise<City | null> => {
+    try {
+        const response = await OpenWeather.get<City[]>('geo/1.0/reverse', {
+            params: { lat, lon, limit: 1 },
+        });
+        return response.data[0] || null;
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
 }
 
 export default fetchGeo;

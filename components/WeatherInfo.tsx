@@ -8,158 +8,39 @@ interface Props {
     data: Current;
 }
 
-// {
-//     title: 'Wind',
-//     value: (
-//         <p>
-//             <span className="text-xl font-semibold">{(weather.wind.speed * 3.6).toFixed(0)}</span> km/h
-//         </p>
-//     ),
-//     details: `Direction: ${weather.wind.deg}°`,
-//     icon: <FaWind className="text-2xl md:text-3xl" />,
-// },
-// {
-//     title: 'Humidity',
-//     value: (
-//         <p>
-//             <span className="text-2xl font-semibold">{weather.main.humidity}</span> %
-//         </p>
-//     ),
-//     icon: <MdDewPoint className="text-2xl md:text-3xl" />,
-// },
-// {
-//     title: 'Pressure',
-//     value: (
-//         <p>
-//             <span className="text-2xl font-semibold">{weather.main.pressure}</span>
-//         </p>
-//     ),
-//     details: 'mBar',
-//     icon: <FaWater className="text-3xl" />,
-// },
-// {
-//     title: 'Visibility',
-//     value: (
-//         <p>
-//             <span className="text-xl font-semibold">{(weather.visibility / 1000).toFixed(2)}</span>
-//         </p>
-//     ),
-//     details: 'Kilometers',
-//     icon: <MdOutlineVisibility className="text-2xl md:text-3xl" />,
-// },
-// {
-//     title: 'Sunrise',
-//     value: (
-//         <p className="text-xl font-semibold">
-//             {new Date(weather.sys.sunrise * 1000).toLocaleTimeString('en-IN', {
-//                 hour: '2-digit',
-//                 minute: '2-digit',
-//                 hour12: false,
-//             })}
-//         </p>
-//     ),
-//     details: 'Morning',
-//     icon: <LuSunrise className="text-2xl md:text-3xl" />,
-// },
-// {
-//     title: 'Sunset',
-//     value: (
-//         <p className="text-xl font-semibold">
-//             {new Date(weather.sys.sunset * 1000).toLocaleTimeString('en-IN', {
-//                 hour: '2-digit',
-//                 minute: '2-digit',
-//                 hour12: false,
-//             })}
-//         </p>
-//     ),
-//     details: 'Evening',
-//     icon: <LuSunset className="text-2xl md:text-3xl" />,
-// }
-
 const WeatherInfo = ({ data }: Props) => {
     const cardData = [
-        {
-            title: 'Wind',
-            value: `${data.wind_speed.toFixed(1)}`,
-            unit: 'm/s',
-            detail: `Direction: ${data.wind_deg}°`,
-            icon: <FaWind />,
+        { title: 'Wind Speed', value: `${data.wind_speed.toFixed(1)}`, unit: 'm/s', icon: <FaWind /> },
+        { title: 'Humidity', value: `${data.humidity}`, unit: '%', icon: <MdDewPoint /> },
+        { title: 'UV Index', value: `${data.uvi}`, unit: '', icon: <MdSunnySnowing /> },
+        { title: 'Pressure', value: `${data.pressure}`, unit: 'hPa', icon: <FaWater /> },
+        { title: 'Cloud Cover', value: `${data.clouds}`, unit: '%', icon: <FaCloud /> },
+        { title: 'Visibility', value: `${(data.visibility / 1000).toFixed(1)}`, unit: 'km', icon: <MdOutlineVisibility /> },
+        { 
+            title: 'Sunrise', 
+            value: `${new Date(data.sunrise * 1000).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false })}`, 
+            unit: '', icon: <LuSunrise /> 
         },
-        {
-            title: 'Humidity',
-            value: `${data.humidity}`,
-            unit: '%',
-            detail: `Dew at ${data.dew_point.toFixed(0)}°C`,
-            icon: <MdDewPoint />,
-        },
-        {
-            title: 'UV Index',
-            value: `${data.uvi}`,
-            // detail: 'Intensity',
-            icon: <MdSunnySnowing />,
-        },
-        {
-            title: 'Pressure',
-            value: `${data.pressure}`,
-            detail: 'mBar',
-            icon: <FaWater />,
-        },
-        {
-            title: 'Clouds',
-            value: `${data.clouds}`,
-            unit: '%',
-            detail: 'Sky Coverage',
-            icon: <FaCloud />,
-        },
-        {
-            title: 'Visibility',
-            value: `${(data.visibility / 1000).toFixed(1)}`,
-            detail: 'Kilometers',
-            icon: <MdOutlineVisibility />,
-        },
-        {
-            title: 'Sunrise',
-            value: `${new Date(data.sunrise * 1000).toLocaleTimeString('en-IN', {
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: false,
-            })}`,
-            detail: 'Morning',
-            icon: <LuSunrise />,
-        },
-        {
-            title: 'Sunset',
-            value: `${new Date(data.sunset * 1000).toLocaleTimeString('en-IN', {
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: false,
-            })}`,
-            detail: 'Evening',
-            icon: <LuSunset />,
+        { 
+            title: 'Sunset', 
+            value: `${new Date(data.sunset * 1000).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false })}`, 
+            unit: '', icon: <LuSunset /> 
         },
     ];
 
     return (
-        <section>
-            <h2 className="section-title">Weather Conditions</h2>
-
-            <div className="grid grid-cols-2 gap-3 md:grid-cols-4 text-gray-400">
+        <section aria-labelledby="current-metrics-heading">
+            <h2 id="current-metrics-heading" className="section-title">Current Metrics</h2>
+            <div className="grid grid-cols-2 gap-3 md:gap-4 md:grid-cols-4">
                 {cardData.map((item, i) => (
-                    <div key={i} className={`rounded-lg md:rounded-xl bg-gray-800 p-3 md:p-4 pt-3 shadow-md`}>
-                        <p className="mb-2 text-xs md:text-base font-medium">{item.title}</p>
-                        <div className="flex justify-between gap-2">
-                            <div>
-                                <p className='text-xl md:text-2xl text-gray-200 font-semibold'>
-                                    {item.value} <span className='text-xs md:text-sm text-gray-300'>
-                                        {item.unit}
-                                    </span>
-                                </p> 
-                                <p className='text-xs md:text-sm opacity-80'>
-                                    {item.detail}
-                                </p>
-                            </div>
-                            <p className="text-3xl md:text-3xl">{item.icon}</p>
+                    <div key={i} className="card !p-5 flex flex-col justify-between hover:-translate-y-1 transition-transform cursor-default bg-gray-50 dark:bg-[#1a1a1d]">
+                        <div className="flex justify-between items-start mb-4">
+                            <p className="text-xs md:text-sm font-black text-gray-500 uppercase tracking-wide">{item.title}</p>
+                            <div className="text-xl text-primary-500" aria-hidden="true">{item.icon}</div>
                         </div>
+                        <p className="text-2xl md:text-3xl text-gray-900 dark:text-gray-100 font-black tracking-tighter">
+                            {item.value} <span className="text-sm font-bold text-gray-400 tracking-normal">{item.unit}</span>
+                        </p> 
                     </div>
                 ))}
             </div>

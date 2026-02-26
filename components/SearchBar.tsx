@@ -3,7 +3,6 @@
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
-import { MdLocationPin } from 'react-icons/md';
 
 const Search = () => {
     const searchParams = useSearchParams();
@@ -12,27 +11,25 @@ const Search = () => {
     useEffect(() => {
         const defaultValue = searchParams.get('q') || '';
         setQuery(defaultValue);
-    }, []);
+    }, [searchParams]);
 
     return (
         <form
             action={'/'}
             method="get"
-            className="group mx-auto mb-10 mt-4 flex max-w-screen-sm items-center rounded-full bg-gray-700/75 px-5 py-2 focus-within:rounded-lg focus-within:bg-gray-700 md:mb-20 md:text-lg"
+            className="group flex w-full items-center rounded-2xl bg-gray-100 dark:bg-[#1e1e20] border-2 border-transparent focus-within:border-primary-500 focus-within:bg-white dark:focus-within:bg-[#121212] transition-all px-4 py-3"
         >
-            <MdLocationPin />
             <input
                 name="q"
                 type="text"
                 value={query}
                 onChange={e => setQuery(e.target.value)}
-                placeholder="Please type your city name"
-                className="w-full bg-transparent px-3 outline-none"
+                placeholder="Search city..."
+                className="w-full bg-transparent px-2 outline-none font-bold text-gray-800 dark:text-gray-100 placeholder:text-gray-400 placeholder:font-semibold"
                 required
             />
-
-            <button>
-                <FaSearch />
+            <button type="submit" className="text-gray-400 hover:text-primary-500 transition-colors p-2 bg-white dark:bg-[#2a2a2d] rounded-xl shadow-sm">
+                <FaSearch className="text-sm" />
             </button>
         </form>
     );
