@@ -1,0 +1,46 @@
+name: Deploy Next.js to EC2
+
+on:
+  push:
+    branches:
+      - feat/front
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Create .env file securely
+        run: |
+          echo "${{ secrets.ENV_FILE }}" > .env
+
+      - name: Copy project files to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "."
+          target: "/home/${{ secrets.EC2_USERNAME }}/weatherxpert"
+
+      - name: SSH into EC2, Build, and Run Docker
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /home/${{ secrets.EC2_USERNAME }}/weatherxpert
+            
+            # Stop and remove the old container if it exists
+            docker stop weatherxpert-app || true
+            docker rm weatherxpert-app || true
+            
+            # Build the new Docker image
+            docker build -t weatherxpert-image .
+            
+            # Run the new container on port 80 (HTTP) mapped to Next.js port 3000
+            docker run -d -p 80:3000 --name weatherxpert-app weatherxpert-image
